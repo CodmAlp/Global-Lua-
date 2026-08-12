@@ -309,7 +309,7 @@ local function showLoginUI()
   if window then
     window.setBackgroundDrawable(ColorDrawable(0x00000000))
     window.setDimAmount(0.65)
-    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE + WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
 
     local lp = window.getAttributes()
     lp.width = WindowManager.LayoutParams.MATCH_PARENT
