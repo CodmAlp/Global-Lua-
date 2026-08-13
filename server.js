@@ -1,49 +1,34 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const cors = require('cors');
+
 const app = express();
-const PORT = process.env.PORT || 3000;
-
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cors());
 
-// Helper function para basahin ang main.core
-function getLoginLuaScript() {
-  try {
-    return fs.readFileSync(path.join(__dirname, 'main.core'), 'utf8');
-  } catch (err) {
-    console.error("Error reading main.core:", err);
-    return 'print("Error: Script not found!")';
-  }
-}
+// Kunin ang secrets mula sa Environment Variables ng hosting (Render)
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 
-// Handler para sa root domain (/)
-app.get('/', (req, res) => {
-  res.setHeader('Content-Type', 'text/plain');
-  res.send('Server is running active!');
+app.get('/login-script', (req, res) => {
+    const userPass = req.headers['x-access-password'];
+
+    // I-validate ang password
+    if (!userPass || userPass !== ADMIN_PASSWORD) {
+        return res.status(401).json({ error: "Unauthorized access" });
+    }
+
+    const filePath = path.join(__dirname, 'main.core');
+    fs.readFile(filePath, 'utf8', (err, data) => {
+        if (err) {
+            return res.status(500).json({ error: "Failed to read script file" });
+        }
+        res.type('text/plain').send(data);
+    });
 });
 
-// Endpoint para sa Lua script
-app.all('/login-script', (req, res) => {
-  const userAgent = (req.headers['user-agent'] || '').toLowerCase();
-
-  // Harang sa mga browsers (Chrome, Mozilla, Safari, Edge, Opera)
-  const isBrowser = userAgent.includes('mozilla') || 
-                    userAgent.includes('chrome') || 
-                    userAgent.includes('safari') || 
-                    userAgent.includes('applewebkit');
-
-  if (isBrowser) {
-    // Kapag browser ang nag-open, Access Denied o 404 display lang (walang HTML form)
-    res.setHeader('Content-Type', 'text/plain');
-    return res.status(403).send('');
-  }
-
-  // Kapag galing sa game/executor (non-browser), direktang ibibigay ang script
-  res.setHeader('Content-Type', 'text/plain');
-  return res.send(getLoginLuaScript());
-});
-
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log('Server is running on port ' + PORT);
+    console.log(`Server running on port ${PORT}`);
 });
