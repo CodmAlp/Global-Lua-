@@ -84,7 +84,7 @@ local function sendToTelegram(key, duration)
   local deviceName = Build.MODEL
   local androidVer = Build.VERSION.RELEASE
 
-  local message = "<b>🚀 New Login Detected!</b>\n"
+  local message = "<b>🚀 New Login Detected Safe!</b>\n"
   .."----------------------------\n"
   .."<b>🔑 Key:</b> <code>"..key.."</code>\n"
   .."<b>⏳ Duration:</b> "..duration.."\n"
