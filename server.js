@@ -1,15 +1,12 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const cors = require('cors');
 
 const app = express();
 app.use(express.json());
-app.use(cors());
 
 // Kunin ang secrets mula sa Environment Variables ng hosting (Render)
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
-const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 
 app.get('/login-script', (req, res) => {
     const userPass = req.headers['x-access-password'];
