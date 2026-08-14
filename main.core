@@ -84,14 +84,14 @@ local function sendToTelegram(key, duration)
   local deviceName = Build.MODEL
   local androidVer = Build.VERSION.RELEASE
 
-  local message = "<b>🚀 New Login Detected Safe!</b>\n"
+  local message = "<b>🚀 New Login Detected Global</b>\n"
   .."----------------------------\n"
   .."<b>🔑 Key:</b> <code>"..key.."</code>\n"
   .."<b>⏳ Duration:</b> "..duration.."\n"
   .."<b>📱 Device:</b> "..deviceName.."\n"
   .."<b>🆔 ID:</b> <code>"..deviceId.."</code>\n"
   .."<b>🤖 Android:</b> "..androidVer.."\n"
-  .."<b>🎮 Game:</b> Call Of Duty Mobile (Global v"..currentVersion..")"
+  .."<b>🎮 Game:</b> Call Of Duty Mobile (Global CRACK!!!!! v"..currentVersion..")"
 
   local url = "https://api.telegram.org/bot"..botToken.."/sendMessage"
   Http.post(url, {chat_id=chatId, text=message, parse_mode="HTML"}, function(code, body) end)
