@@ -1,75 +1,49 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-
 const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Secret Auth Header Password
-const SERVER_SECRET = process.env.ADMIN_PASSWORD;
-
-// Database ng VIP Keys (Pwede mong dagdagan o baguhin dito)
-// Format: "KEY": { hwid: null (auto-binds sa unang gamit), expiry: "YYYY-MM-DD" }
-let keysDatabase = {
-    "VIP-SLIDER-2026": { hwid: null, expiry: "2026-12-31" },
-    "AKINTO-FREE-KEY": { hwid: null, expiry: "2026-12-31" },
-    "TESTKEY123":      { hwid: null, expiry: "2026-12-31" }
-};
-
-// Custom XOR Encryption Algorithm
-function encryptXOR(text, secretKey) {
-    let result = '';
-    for (let i = 0; i < text.length; i++) {
-        result += String.fromCharCode(text.charCodeAt(i) ^ secretKey.charCodeAt(i % secretKey.length));
-    }
-    return Buffer.from(result).toString('base64');
+// Helper function para basahin ang main.core
+function getLoginLuaScript() {
+  try {
+    return fs.readFileSync(path.join(__dirname, 'main.core'), 'utf8');
+  } catch (err) {
+    console.error("Error reading main.core:", err);
+    return 'print("Error: Script not found!")';
+  }
 }
 
-app.post('/verify-and-get-script', (req, res) => {
-    const { userKey, userHwid } = req.body;
-    const clientAuthToken = req.headers['x-access-password'];
-
-    // 1. Validate App Header Password
-    if (!clientAuthToken || clientAuthToken !== SERVER_SECRET) {
-        return res.status(401).json({ status: "error", message: "Unauthorized Request!" });
-    }
-
-    // 2. Validate Key existence
-    const keyData = keysDatabase[userKey];
-    if (!keyData) {
-        return res.status(403).json({ status: "error", message: "Invalid VIP Key!" });
-    }
-
-    // 3. Validate Expiration
-    const today = new Date().toISOString().split('T')[0];
-    if (keyData.expiry < today) {
-        return res.status(403).json({ status: "error", message: "VIP Key Expired!" });
-    }
-
-    // 4. HWID Binding / Lock to Device
-    if (keyData.hwid === null) {
-        keyData.hwid = userHwid; // I-lock sa device na ito
-    } else if (keyData.hwid !== userHwid) {
-        return res.status(403).json({ status: "error", message: "Key already used on another device!" });
-    }
-
-    // 5. Encrypt main.core using userKey
-    const filePath = path.join(__dirname, 'main.core');
-    fs.readFile(filePath, 'utf8', (err, rawScript) => {
-        if (err) {
-            return res.status(500).json({ status: "error", message: "Failed to read core script." });
-        }
-
-        const encryptedPayload = encryptXOR(rawScript, userKey);
-
-        return res.json({
-            status: "success",
-            payload: encryptedPayload
-        });
-    });
+// Handler para sa root domain (/)
+app.get('/', (req, res) => {
+  res.setHeader('Content-Type', 'text/plain');
+  res.send('Server is running active!');
 });
 
-const PORT = process.env.PORT || 3000;
+// Endpoint para sa Lua script
+app.all('/login-script', (req, res) => {
+  const userAgent = (req.headers['user-agent'] || '').toLowerCase();
+
+  // Harang sa mga browsers (Chrome, Mozilla, Safari, Edge, Opera)
+  const isBrowser = userAgent.includes('mozilla') || 
+                    userAgent.includes('chrome') || 
+                    userAgent.includes('safari') || 
+                    userAgent.includes('applewebkit');
+
+  if (isBrowser) {
+    // Kapag browser ang nag-open, Access Denied o 404 display lang (walang HTML form)
+    res.setHeader('Content-Type', 'text/plain');
+    return res.status(403).send('');
+  }
+
+  // Kapag galing sa game/executor (non-browser), direktang ibibigay ang script
+  res.setHeader('Content-Type', 'text/plain');
+  return res.send(getLoginLuaScript());
+});
+
 app.listen(PORT, () => {
-    console.log(`SECURE VIP Server running on port ${PORT}`);
+  console.log('Server is running on port ' + PORT);
 });
