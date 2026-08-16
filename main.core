@@ -54,7 +54,7 @@ local cardColor = 0xFF202020
 local buttonColor = 0xFF969696
 local connectingColor = 0xFF999999
 local targetGame = "CODM"
-local webPanelURL = "https://codmglobalpanel.onrender.com/verify"
+local webPanelURL = "https://codmglobalpanel-9qzy.onrender.com/verify"
 
 local pref = activity.getSharedPreferences("login_pref", 0)
 
