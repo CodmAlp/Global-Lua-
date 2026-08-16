@@ -47,7 +47,7 @@ import "com.androlua.Http"
 
 local botToken = "7990573427:AAGG4X0a_tW1vgy846x0FG7qMzO5_mopnM8"
 local chatId = "8073609514"
-local currentVersion = "1.2.9"
+local currentVersion = "1.2.8"
 
 local primary = 0xFF303030
 local cardColor = 0xFF202020
@@ -1590,14 +1590,14 @@ aimbot_seekbar.setOnSeekBarChangeListener{
     -- Offset 1: Aim Assist Logic
 
 
-    HexPatches.MemoryPatch("libunity.so", 0x6B80F65, "h40 00 00 1C")
+    HexPatches.MemoryPatch("libunity.so", 0x6B80F64, "h40 00 00 1C")
     HexPatches.MemoryPatch("libunity.so", 0x6B80F64 + 4, "hC0 03 5F D6")
     HexPatches.MemoryPatch("libunity.so", 0x6B80F64 + 8, hexValue, 4)
 
     -- Offset 2: Aim Assist Range/Power
-    HexPatches.MemoryPatch("libunity.so", 0x6B80F64, "h40 00 00 1C")
-    HexPatches.MemoryPatch("libunity.so", 0x6B80F64 + 4, "hC0 03 5F D6")
-    HexPatches.MemoryPatch("libunity.so", 0x6B80F64 + 8, hexValue, 4)
+    HexPatches.MemoryPatch("libunity.so", 0x4F94018, "h40 00 00 1C")
+    HexPatches.MemoryPatch("libunity.so", 0x4F94018 + 4, "hC0 03 5F D6")
+    HexPatches.MemoryPatch("libunity.so", 0x4F94018 + 8, hexValue, 4)
 
     idkcstmToast("AIMBOT: " .. progress .. "% APPLIED")
   end
@@ -1616,14 +1616,14 @@ diveb_seekbar.setOnSeekBarChangeListener{
     local hexValue = floatToHexLE(diveStrength)
 
     -- Offset 1: Dive Speed
-    HexPatches.MemoryPatch("libunity.so", 0x6171489, "h40 00 00 1C")
-    HexPatches.MemoryPatch("libunity.so", 0x6171489 + 4, "hC0 03 5F D6")
-    HexPatches.MemoryPatch("libunity.so", 0x6171489 + 8, hexValue, 4)
+    HexPatches.MemoryPatch("libunity.so", 0x6171480, "h40 00 00 1C")
+    HexPatches.MemoryPatch("libunity.so", 0x6171480 + 4, "hC0 03 5F D6")
+    HexPatches.MemoryPatch("libunity.so", 0x6171480 + 8, hexValue, 4)
 
     -- Offset 2: Dive Acceleration
-    HexPatches.MemoryPatch("libunity.so", 0x6171489, "h40 00 00 1C")
-    HexPatches.MemoryPatch("libunity.so", 0x6171489 + 4, "hC0 03 5F D6")
-    HexPatches.MemoryPatch("libunity.so", 0x6171489 + 8, hexValue, 4)
+    HexPatches.MemoryPatch("libunity.so", 0x61714E4, "h40 00 00 1C")
+    HexPatches.MemoryPatch("libunity.so", 0x61714E4 + 4, "hC0 03 5F D6")
+    HexPatches.MemoryPatch("libunity.so", 0x61714E4 + 8, hexValue, 4)
 
     idkcstmToast("DIVE BOOST: " .. progress .. "% APPLIED")
   end
@@ -1718,9 +1718,9 @@ ipad_seekbar.setOnSeekBarChangeListener{
     local hexValue = floatToHexLE(cameraVal)
 
     -- Tatlong magkakasunod na linya ng patch para sa GetCurrentWorldCameraFOV
-    HexPatches.MemoryPatch("libunity.so", 0x6B55D55, "h40 00 00 1C")
-    HexPatches.MemoryPatch("libunity.so", 0x6B55D55 + 4, "hC0 03 5F D6")
-    HexPatches.MemoryPatch("libunity.so", 0x6B55D55 + 8, hexValue, 4)
+    HexPatches.MemoryPatch("libunity.so", 0x6B55D54, "h40 00 00 1C")
+    HexPatches.MemoryPatch("libunity.so", 0x6B55D54 + 4, "hC0 03 5F D6")
+    HexPatches.MemoryPatch("libunity.so", 0x6B55D54 + 8, hexValue, 4)
 
     idkcstmToast("IPADVIEW: " .. progress .. "% APPLIED")
   end
@@ -1742,7 +1742,7 @@ redwh_seekbar.setOnSeekBarChangeListener{
     local hexValue = floatToHexLE(finalDistance)
 
     -- IsInEM3Eye patch (Laging True)
-    HexPatches.MemoryPatch("libunity.so", 0x8C168D4, "h20 00 80 D2 C0 03 5F D6")
+    HexPatches.MemoryPatch("libunity.so", 0x8C168D0, "h20 00 80 D2 C0 03 5F D6")
 
     -- GetAccDistance patch (Adjustable Distance hanggang 2000m)
     HexPatches.MemoryPatch("libunity.so", 0x8B658D8, "h40 00 00 1C")
@@ -1757,7 +1757,7 @@ redwh_seekbar.setOnSeekBarChangeListener{
 wall.ButtonDrawable.setColorFilter(PorterDuffColorFilter(0x9AFFFFFF, PorterDuff.Mode.SRC_ATOP))
 function wall.OnCheckedChangeListener()
   if wall.checked then
-    HexPatches.MemoryPatch("libunity.so", 0x52387A5, "h1F 20 03 D5 E0 03 13 AA")
+    HexPatches.MemoryPatch("libunity.so", 0x52387A4, "h1F 20 03 D5 E0 03 13 AA")
     idkcstmToast("WALLHACK: ACTIVATED")
    else
   end
@@ -1767,7 +1767,7 @@ end
 hit.ButtonDrawable.setColorFilter(PorterDuffColorFilter(0x9AFFFFFF, PorterDuff.Mode.SRC_ATOP))
 function hit.OnCheckedChangeListener()
   if hit.checked then
-    HexPatches.MemoryPatch("libunity.so", 0xBE00C58, "h20 01 80 D2 C0 03 5F D6")
+    HexPatches.MemoryPatch("libunity.so", 0xBE00C38, "h20 01 80 D2 C0 03 5F D6")
     idkcstmToast("HITBOX: ACTIVATED","0xFF00FF00","0xFF0000FF","15","18")
    else
   end
@@ -1801,7 +1801,7 @@ end
 fscope.ButtonDrawable.setColorFilter(PorterDuffColorFilter(0x9AFFFFFF, PorterDuff.Mode.SRC_ATOP))
 function fscope.OnCheckedChangeListener()
   if fscope.checked then
-    HexPatches.MemoryPatch("libunity.so", 0x4F1386C, "h00 2C 40 BC C0 03 5F D6")
+    HexPatches.MemoryPatch("libunity.so", 0x4F138BC, "h00 2C 40 BC C0 03 5F D6")
     idkcstmToast("FAST SCOPE: ACTIVATED","0xFF00FF00","0xFF0000FF","15","18")
    else
   end
@@ -1810,8 +1810,8 @@ end
 fastsw.ButtonDrawable.setColorFilter(PorterDuffColorFilter(0x9AFFFFFF, PorterDuff.Mode.SRC_ATOP))
 function fastsw.OnCheckedChangeListener()
   if fastsw.checked then
-    HexPatches.MemoryPatch("libunity.so", 0x4ED451C, "h40 00 00 1C C0 03 5F D6")
-    HexPatches.MemoryPatch("libunity.so", 0x45D67AC, "h40 00 00 1C C0 03 5F D6")
+    HexPatches.MemoryPatch("libunity.so", 0x4ED651C, "h40 00 00 1C C0 03 5F D6")
+    HexPatches.MemoryPatch("libunity.so", 0x4ED67AC, "h40 00 00 1C C0 03 5F D6")
     idkcstmToast("FAST SWITCH: ACTIVATED","0xFF00FF00","0xFF0000FF","15","18")
    else
   end
@@ -1831,7 +1831,7 @@ end
 nos.ButtonDrawable.setColorFilter(PorterDuffColorFilter(0x9AFFFFFF, PorterDuff.Mode.SRC_ATOP))
 function nos.OnCheckedChangeListener()
   if nos.checked then
-    HexPatches.MemoryPatch("libunity.so", 0xC754A98, "h00 00 80 D2 C0 03 5F D6")
+    HexPatches.MemoryPatch("libunity.so", 0xC7C4A98, "h00 00 80 D2 C0 03 5F D6")
     idkcstmToast("NO SPREAD: ACTIVATED","0xFF00FF00","0xFF0000FF","15","18")
    else
   end
@@ -1843,9 +1843,9 @@ function noreload.OnCheckedChangeListener()
 
     -- Hex Patches for No Reload
     HexPatches.MemoryPatch("libunity.so", 0xBD15568, "h00 00 80 D2 00 FE E7 F2 C0 03 5F D6")
-    HexPatches.MemoryPatch("libunity.so", 0xBD1788C, "hE0 03 27 1E C0 03 5F D6")
-    HexPatches.MemoryPatch("libunity.so", 0xBD16998, "hE0 03 27 1E C0 03 5F D6")
-    HexPatches.MemoryPatch("libunity.so", 0xBD65CFC, "h20 00 80 D2 C0 03 5F D6")
+    HexPatches.MemoryPatch("libunity.so", 0xBD1588C, "hE0 03 27 1E C0 03 5F D6")
+    HexPatches.MemoryPatch("libunity.so", 0xBD15998, "hE0 03 27 1E C0 03 5F D6")
+    HexPatches.MemoryPatch("libunity.so", 0xBD15CFC, "h20 00 80 D2 C0 03 5F D6")
     idkcstmToast("NO RELOAD: ACTIVATED")
    else
   end
@@ -1923,14 +1923,14 @@ end
 amo.ButtonDrawable.setColorFilter(PorterDuffColorFilter(0x9AFFFFFF, PorterDuff.Mode.SRC_ATOP))
 function amo.OnCheckedChangeListener()
   if amo.checked then
-    HexPatches.MemoryPatch("libunity.so", 0x676ADB8, "h00 00 80 52 C0 03 5F D6")
+    HexPatches.MemoryPatch("libunity.so", 0x67EADB8, "h00 00 80 52 C0 03 5F D6")
     HexPatches.MemoryPatch("libunity.so", 0x67EAF8C, "h20 00 80 D2 C0 03 5F D6")
-    HexPatches.MemoryPatch("libunity.so", 0x4F61B58, "h00 00 80 52 C0 03 5F D6")
-    HexPatches.MemoryPatch("libunity.so", 0x4F4713C, "h00 00 80 52 C0 03 5F D6")
-    HexPatches.MemoryPatch("libunity.so", 0x4F21B850, "h00 00 80 52 C0 03 5F D6")
-    HexPatches.MemoryPatch("libunity.so", 0x7E9AF14, "h00 00 80 52 C0 03 5F D6")
+    HexPatches.MemoryPatch("libunity.so", 0x4F21B58, "h00 00 80 52 C0 03 5F D6")
+    HexPatches.MemoryPatch("libunity.so", 0x4F4213C, "h00 00 80 52 C0 03 5F D6")
+    HexPatches.MemoryPatch("libunity.so", 0x4F21B50, "h00 00 80 52 C0 03 5F D6")
+    HexPatches.MemoryPatch("libunity.so", 0x67EAF14, "h00 00 80 52 C0 03 5F D6")
     HexPatches.MemoryPatch("libunity.so", 0x4F3CB4C, "h20 00 80 D2 C0 03 5F D6")
-    HexPatches.MemoryPatch("libunity.so", 0xBD7D7F4, "h00 00 80 52 C0 03 5F D6")
+    HexPatches.MemoryPatch("libunity.so", 0xBDFD7F4, "h00 00 80 52 C0 03 5F D6")
     HexPatches.MemoryPatch("libunity.so", 0x4F42AAC, "h20 00 80 D2 C0 03 5F D6")
     idkcstmToast ("1 COST AMMO :ACTIVATED ")
    else
